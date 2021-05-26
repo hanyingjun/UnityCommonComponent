@@ -8,9 +8,10 @@
     {
         [Header("方向灵敏度")]
         [SerializeField] float m_nRotateRange = 120;
-        [Header("上下最大视角(Y视角)")]
-        [SerializeField] float m_nViewUpRange = 60;
-        [SerializeField] float m_nViewDownRange = -45.0f;
+        [Header("上下最大视角(Y视角), 摄像机是逆时针转的，所以upRange < downRange")]
+        [SerializeField] float m_nViewUpRange = 20;
+        [SerializeField] float m_nViewDownRange = 47.0f;
+        [SerializeField] float m_nPerUnitDistance = 20.0f;
         [Header("操作触摸板")]
         [SerializeField] TouchPad m_touchPad = null;
         [SerializeField] float m_nSmoothTime = 0.3f;
@@ -57,8 +58,9 @@
         /// <param name="moveDir"></param>
         private void OnValueChange(Vector2 moveDir)
         {
-            float rotationx = Mathf.Clamp(m_nRotateX + moveDir.y * m_nViewUpRange, m_nViewDownRange, m_nViewUpRange);
+            float rotationx = Mathf.Clamp(m_nRotateX - moveDir.y * m_nPerUnitDistance, m_nViewUpRange, m_nViewDownRange);
             this.m_v3Target.x = rotationx;
+            //UnityTools.LogColor(Color.cyan, rotationx);
             //this.transform.localEulerAngles = new Vector3(rotationx, 0, 0);
         }
     }
